@@ -1,0 +1,25 @@
+version: "3.7"
+services:
+
+  mongo-database:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - 27017:27017
+    volumes:
+      - ./data/mongo:/data/db
+    container_name: mongo-database
+
+  # FastAPI instance
+  test-api:
+    build: .
+    image: test-api
+    volumes:
+      - .:/backend
+    ports:
+      - 8000:8000
+    depends_on:
+      - mongo-database
+    container_name: test-api
