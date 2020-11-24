@@ -6,7 +6,7 @@ from bson.objectid import ObjectId
 
 from api.database import db
 from api.schemas.users import CreateUserSchema, UserSchema, UpdateUserSchema
-from api.auth import hash_password, Autheticate
+from api.auth import hash_password, Autheticate, IsAdmin
 
 router = APIRouter()
 
@@ -33,7 +33,11 @@ async def list_users():
     return users
 
 @router.get('/{id}/', response_model=UserSchema)
-async def retrieve_user(id: str, auth:  = Depends(Autheticate)):
+async def retrieve_user(id: str, auth: Autheticate = Depends()):
+    # If the requester is not admin, and not owner of this account
+    if not auth.admin and auth.id != id:
+        raise HTTPException(status_code=401, detail='unauthorized')
+
     try:
         # Fetch user from db
         user = db.users.find_one({'_id': ObjectId(id)})
@@ -49,7 +53,11 @@ async def retrieve_user(id: str, auth:  = Depends(Autheticate)):
     return user
 
 @router.patch('/{id}/')
-async def update_user(id: str, data: UpdateUserSchema):
+async def update_user(id: str, data: UpdateUserSchema, auth: Autheticate = Depends()):
+    # If the requester is not admin, and not owner of this account
+    if not auth.admin and auth.id != id:
+        raise HTTPException(status_code=401, detail='unauthorized')
+
     if data.password:
         # Hash the password
         data.password = hash_password(data.password)
@@ -69,7 +77,7 @@ async def update_user(id: str, data: UpdateUserSchema):
     return Response(status_code=204)
 
 @router.delete('/{id}/')
-async def delete_user(id: str):
+async def delete_user(id: str, auth: IsAdmin = Depends()):
     try:
         # delete user data in db
         result = db.users.delete_one({'_id': ObjectId(id)})
