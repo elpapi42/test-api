@@ -1,14 +1,14 @@
 from fastapi import FastAPI
 
-from braveminer import database
-from braveminer import endpoints
-from braveminer import settings
+from api import database
+from api import endpoints
+from api import settings
 
 
 app = FastAPI()
 
 # Register endpoints
-endpoints.register(app)
+#endpoints.register(app)
 
 @app.on_event('startup')
 async def startup():
