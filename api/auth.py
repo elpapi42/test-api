@@ -1,6 +1,6 @@
 from jose import jwt
 from passlib.context import CryptContext
-from fastapi import Request, HTTPException
+from fastapi import Request, HTTPException, Depends
 
 from api import settings
 
@@ -37,3 +37,13 @@ class Autheticate():
 
         self.id = payload.get('sub')
         self.admin = payload.get('adm')
+
+class IsAdmin():
+    """Ensures the user is admin."""
+    def __init__(self, auth: Autheticate = Depends()):
+        
+        if not auth.admin:
+            raise HTTPException(401, 'unathorized')
+
+        self.id = auth.id
+        self.admin = auth.admin

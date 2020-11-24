@@ -33,7 +33,7 @@ async def list_users():
     return users
 
 @router.get('/{id}/', response_model=UserSchema)
-async def retrieve_user(id: str, auth: str = Depends(Autheticate)):
+async def retrieve_user(id: str, auth:  = Depends(Autheticate)):
     try:
         # Fetch user from db
         user = db.users.find_one({'_id': ObjectId(id)})
