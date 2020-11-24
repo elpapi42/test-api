@@ -6,12 +6,16 @@ from bson.objectid import ObjectId
 
 from api.database import db
 from api.schemas.users import CreateUserSchema, UserSchema, UpdateUserSchema
-
+from api.auth import hash_password
 
 router = APIRouter()
 
+
 @router.post('/', response_model=UserSchema)
 async def create_user(data: CreateUserSchema):
+    # Hash the password
+    data.password = hash_password(data.password)
+
     try:
         user = db.users.insert_one(data.dict())
     except errors.DuplicateKeyError:
@@ -46,6 +50,10 @@ async def retrieve_user(id: str):
 
 @router.patch('/{id}/')
 async def update_user(id: str, data: UpdateUserSchema):
+    if data.password:
+        # Hash the password
+        data.password = hash_password(data.password)
+
     try:
         # Update user data in db
         result = db.users.update_one(
