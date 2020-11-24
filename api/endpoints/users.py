@@ -16,6 +16,9 @@ async def create_user(data: CreateUserSchema):
     # Hash the password
     data.password = hash_password(data.password)
 
+    if (data.company_id):
+        data.company_id = ObjectId(data.company_id)
+
     try:
         user = db.users.insert_one(data.dict())
     except errors.DuplicateKeyError:
@@ -29,6 +32,7 @@ async def create_user(data: CreateUserSchema):
 @router.get('/', response_model=List[UserSchema])
 async def list_users(auth: IsAdmin = Depends()):
     users = db.users.find()
+    # Convert to list of users and injects id with correct naming
     users = [{'id': str(user.get('_id')), **user} for user in users]
     return users
 
@@ -66,6 +70,9 @@ async def update_user(id: str, data: UpdateUserSchema, auth: Autheticate = Depen
     if data.admin and not auth.admin:
         # Remove admin flag
         data.admin = False
+
+    if (data.company_id):
+        data.company_id = ObjectId(data.company_id)
 
     try:
         # Update user data in db

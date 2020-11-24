@@ -1,11 +1,12 @@
 from typing import Optional
 from enum import Enum
 
-from bson.objectid import ObjectId
 from pydantic import BaseModel, validator, ValidationError
 from validator_collection import checkers
+from bson.objectid import ObjectId
 
 from api.database import db
+from api.types import PydanticObjectId
 
 
 class UserGender(str, Enum):
@@ -36,26 +37,31 @@ class UserValidatorsModel(BaseModel):
     @validator('company_id', check_fields=False)
     def validate_company_id(cls, v):
         """Check the supplied company exist in db."""
+        if v is None:
+            return v
+
         count = db.companies.count_documents({'_id': ObjectId(v)})
+
         if count < 1:
             raise TypeError('supplied company is not registered')
+
         return v
 
 class UserSchema(BaseModel):
     id: str
     email: str
-    company_id: Optional[str]
+    company_id: Optional[PydanticObjectId]
     profile: Optional[ProfileSchema]
     admin: Optional[bool] = False
 
 class CreateUserSchema(UserValidatorsModel):
     email: str
     password: str
-    company_id: Optional[str] = None
+    company_id: Optional[PydanticObjectId] = None
     profile: Optional[ProfileSchema]
 
 class UpdateUserSchema(UserValidatorsModel):
     password: Optional[str]
-    company_id: Optional[str]
+    company_id: Optional[PydanticObjectId]
     profile: Optional[ProfileSchema]
     admin: Optional[bool]
