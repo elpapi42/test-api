@@ -17,7 +17,7 @@ async def create_company(data: WriteCompanySchema, auth: IsAdmin = Depends()):
         company = db.companies.insert_one(data.dict())
     except errors.DuplicateKeyError:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
+            status_code=400,
             detail='company ith this name already registered'
         )
 
