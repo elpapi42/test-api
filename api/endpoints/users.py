@@ -10,7 +10,7 @@ from api.schemas.users import CreateUserSchema, UserSchema
 router = APIRouter()
 
 @router.post('/', response_model=UserSchema)
-async def create(data: CreateUserSchema):
+async def create_user(data: CreateUserSchema):
     try:
         user = db.users.insert_one(data.dict())
     except errors.DuplicateKeyError:
@@ -21,7 +21,8 @@ async def create(data: CreateUserSchema):
 
     return data
 
-@router.get('/')
-async def get_users(data: CreateUserSchema):
+@router.get('/', response_model=List[UserSchema])
+async def list_users():
     users = db.users.find()
+    users = [user for user in users]
     return users
