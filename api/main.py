@@ -8,7 +8,7 @@ from api import settings
 app = FastAPI()
 
 # Register endpoints
-#endpoints.register(app)
+endpoints.register(app)
 
 @app.on_event('startup')
 async def startup():
