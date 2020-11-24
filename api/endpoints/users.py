@@ -27,7 +27,7 @@ async def create_user(data: CreateUserSchema):
     return {'id': str(user.inserted_id), **data.dict()}
 
 @router.get('/', response_model=List[UserSchema])
-async def list_users():
+async def list_users(auth: IsAdmin = Depends()):
     users = db.users.find()
     users = [{'id': str(user.get('_id')), **user} for user in users]
     return users
