@@ -103,6 +103,11 @@ Response
 ]
 ```
 
+You can also filter users by company
+
+GET `/users/?company=5fbd6b9beffeca3ed83d0a03`
+Headers: `Authorization`: `Bearer <token>`
+
 ### Retrieve User
 
 Normal users can only access their own data, for fetch data of users other than autheticated, the token must be owned by an admin
