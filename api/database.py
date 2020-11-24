@@ -12,6 +12,7 @@ def setup():
 
     # An index for ensure users email is unique
     db.users.create_index([('email', ASCENDING)], unique=True)
+    db.users.create_index([('company_id', ASCENDING)])
 
     # An index for ensure companies name is unique
     db.companies.create_index([('name', ASCENDING)], unique=True)

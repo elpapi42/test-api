@@ -67,6 +67,9 @@ async def update_company(id: str, data: UpdateCompanySchema, auth: IsAdmin = Dep
 
 @router.delete('/{id}/')
 async def delete_user(id: str, auth: IsAdmin = Depends()):
+    # Remove references to this company
+    result = db.users.update_many({'company_id': id}, {'$set': {'company_id': None}})
+    
     try:
         # delete company data in db
         result = db.companies.delete_one({'_id': ObjectId(id)})
