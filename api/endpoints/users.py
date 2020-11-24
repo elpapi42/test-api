@@ -30,10 +30,24 @@ async def create_user(data: CreateUserSchema):
     return {'id': str(user.inserted_id), **data.dict()}
 
 @router.get('/', response_model=List[UserSchema])
-async def list_users(auth: IsAdmin = Depends()):
-    users = db.users.find()
+async def list_users(company: str = None, auth: IsAdmin = Depends()):
+    filters = {}
+
+    # If company filter, apply it
+    if company:
+        try:
+            filters['company_id'] = ObjectId(company)
+        except errors.InvalidId:
+            # If something fails with the filter
+            # Returns empty list
+            return []
+
+    # Fetch from db
+    users = db.users.find(filters)
+
     # Convert to list of users and injects id with correct naming
     users = [{'id': str(user.get('_id')), **user} for user in users]
+
     return users
 
 @router.get('/{id}/', response_model=UserSchema)
