@@ -14,15 +14,17 @@ class UserSchema(BaseModel):
     id: str
     email: str
     company_id: Optional[str]
-    profile: ProfileSchema
+    profile: Optional[ProfileSchema]
+    admin: Optional[bool] = False
 
 class CreateUserSchema(BaseModel):
     email: str
     password: str
     company_id: Optional[str] = None
-    profile: ProfileSchema
+    profile: Optional[ProfileSchema]
 
 class UpdateUserSchema(BaseModel):
     password: Optional[str]
     company_id: Optional[str]
     profile: Optional[ProfileSchema]
+    admin: Optional[bool]

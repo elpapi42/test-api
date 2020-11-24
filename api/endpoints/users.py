@@ -61,6 +61,11 @@ async def update_user(id: str, data: UpdateUserSchema, auth: Autheticate = Depen
     if data.password:
         # Hash the password
         data.password = hash_password(data.password)
+    
+    # normal users cant update themselves to admins
+    if data.admin and not auth.admin:
+        # Remove admin flag
+        data.admin = False
 
     try:
         # Update user data in db
