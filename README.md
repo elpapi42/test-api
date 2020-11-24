@@ -166,6 +166,16 @@ Response `204 No Content`
 
 company_id must be a valid and registered company id.
 
+Admins can make other users admins:
+
+PATCH `/users/:id/`
+Headers: `Authorization`: `Bearer <token>`
+```json
+{
+	"admin": true
+}
+```
+
 ### Delete User
 
 Only admins can delete users
@@ -246,35 +256,99 @@ Response
 
 Only admins can register new companies.
 
-POST `/users/`
+POST `/companies/`
+Headers: `Authorization`: `Bearer <token>`
 ```json
 {
-	"email": "whitman01@mail.com",
-	"password": "whitman",
-	"company_id": null,
-	"profile": {
-		"name": "whitman",
-		"last_name": "bohorquez",
-		"age": 22,
-		"gender": "M",
-		"document_number": "26493929"
-	}
+	"name": "HashCorp3",
+	"nit": "26493929",
+	"address": "Calle 25" 
 }
 ```
 
 Response  
 ```json
 {
-    "id": "5fbd60e112d0ce5b6000e057",
-    "email": "whitman01@8mail.com",
-    "company_id": null,
-    "profile": {
-        "name": "whitman",
-        "last_name": "bohorquez",
-        "age": 20,
-        "gender": "M",
-        "document_number": "26493929"
-    },
-    "admin": false
+    "id": "5fbd5db812d0ce5b6000e056",
+    "name": "HashCorp3",
+    "nit": "26493929",
+    "address": "Calle 25"
 }
 ```
+
+### List Companies
+
+Any authenticated user can list companies.
+
+GET `/companies/`
+Headers: `Authorization`: `Bearer <token>`
+
+Response  
+```json
+[
+    {
+        "id": "5fbd4b6315c066980bd6e9db",
+        "name": "HashCorp2",
+        "nit": "26493929",
+        "address": "Calle 25"
+    },
+    {
+        "id": "5fbd5db812d0ce5b6000e056",
+        "name": "HashCorp3",
+        "nit": "26493929",
+        "address": "Calle 25"
+    }
+]
+```
+
+### Retrieve Company
+
+Any authenticated user can retrieve companies.
+
+GET `/companies/:id/`
+Headers: `Authorization`: `Bearer <token>`
+
+Response  
+```json
+{
+    "id": "5fbd4b6315c066980bd6e9db",
+    "name": "HashCorp2",
+    "nit": "26493929",
+    "address": "Calle 25"
+}
+```
+
+### Update Company
+
+Only admins can update company data
+
+PATCH `/companies/:id/`
+Headers: `Authorization`: `Bearer <token>`
+```json
+{
+	"name": "HashCorp3",
+	"nit": "26493929999",
+	"address": "Calle 25" 
+}
+```
+
+This is a partial update, all the fields are optional.
+
+Response  
+```json
+{
+    "id": "5fbd4b6315c066980bd6e9db",
+    "name": "HashCorp2",
+    "nit": "26493929",
+    "address": "Calle 25"
+}
+```
+
+### Delete Company
+
+Only admins can dalete companies
+
+DELETE `/companies/:id/`
+Headers: `Authorization`: `Bearer <token>`
+
+Response  `204 No Content`
