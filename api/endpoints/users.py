@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import APIRouter, HTTPException, Response, Depends, status
+from fastapi import APIRouter, HTTPException, Response, Depends
 from pymongo import errors
 from bson.objectid import ObjectId
 
@@ -20,7 +20,7 @@ async def create_user(data: CreateUserSchema):
         user = db.users.insert_one(data.dict())
     except errors.DuplicateKeyError:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
+            status_code=400,
             detail='email already registered'
         )
 
