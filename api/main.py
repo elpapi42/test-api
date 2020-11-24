@@ -12,8 +12,7 @@ endpoints.register(app)
 
 @app.on_event('startup')
 async def startup():
-    #await database.connect()
-    pass
+    database.setup()
 
 @app.on_event('shutdown')
 async def shutdown():
