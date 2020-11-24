@@ -25,8 +25,9 @@ async def create_user(data: LoginSchema):
     token = jwt.encode(
         {
             'exp': datetime.now(timezone.utc) + timedelta(hours=6),
+            'sub': str(user.get('_id')),
             # Embed on the token if the user is an admin
-            'adm': user.get('superadmin') or False
+            'adm': user.get('admin') or False
         },
         key=settings.SECRET_KEY,
         algorithm='HS256'

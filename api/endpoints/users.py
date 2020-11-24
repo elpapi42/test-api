@@ -6,7 +6,7 @@ from bson.objectid import ObjectId
 
 from api.database import db
 from api.schemas.users import CreateUserSchema, UserSchema, UpdateUserSchema
-from api.auth import hash_password
+from api.auth import hash_password, Autheticate
 
 router = APIRouter()
 
@@ -33,7 +33,7 @@ async def list_users():
     return users
 
 @router.get('/{id}/', response_model=UserSchema)
-async def retrieve_user(id: str):
+async def retrieve_user(id: str, auth: str = Depends(Autheticate)):
     try:
         # Fetch user from db
         user = db.users.find_one({'_id': ObjectId(id)})
