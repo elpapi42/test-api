@@ -4,21 +4,25 @@ from pydantic import BaseModel
 
 
 class ProfileSchema(BaseModel):
-    name: str
-    last_name: str
-    age: int
-    gender: str
-    document_number: str
+    name: Optional[str]
+    last_name: Optional[str]
+    age: Optional[int]
+    gender: Optional[str]
+    document_number: Optional[str]
 
-class UpdateUserSchema(BaseModel):
+class UserSchema(BaseModel):
+    id: str
+    email: str
     company_id: str
     profile: ProfileSchema
 
-class UserSchema(UpdateUserSchema):
+class CreateUserSchema(BaseModel):
     email: str
-
-class CreateUserSchema(UserSchema):
     password: str
+    company_id: str
+    profile: ProfileSchema
 
-class RetrieveUserSchema(UserSchema):
-    id: str
+class UpdateUserSchema(BaseModel):
+    password: Optional[str]
+    company_id: Optional[str]
+    profile: Optional[ProfileSchema]
