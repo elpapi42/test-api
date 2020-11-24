@@ -13,13 +13,13 @@ class ProfileSchema(BaseModel):
 class UserSchema(BaseModel):
     id: str
     email: str
-    company_id: str
+    company_id: Optional[str]
     profile: ProfileSchema
 
 class CreateUserSchema(BaseModel):
     email: str
     password: str
-    company_id: str
+    company_id: Optional[str] = None
     profile: ProfileSchema
 
 class UpdateUserSchema(BaseModel):
