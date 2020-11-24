@@ -44,7 +44,7 @@ async def retrieve_user(id: str):
 
     return user
 
-@router.patch('/{id}/', response_model=UserSchema)
+@router.patch('/{id}/')
 async def update_user(id: str, data: UpdateUserSchema):
     try:
         # Update user data in db
@@ -56,6 +56,19 @@ async def update_user(id: str, data: UpdateUserSchema):
         raise HTTPException(status_code=400, detail='invalid id')
 
     if result.matched_count <= 0:
+        raise HTTPException(status_code=404, detail='user not found')
+
+    return Response(status_code=204)
+
+@router.delete('/{id}/')
+async def delete_user(id: str):
+    try:
+        # delete user data in db
+        result = db.users.delete_one({'_id': ObjectId(id)})
+    except errors.InvalidId:
+        raise HTTPException(status_code=400, detail='invalid id')
+
+    if result.deleted_count <= 0:
         raise HTTPException(status_code=404, detail='user not found')
 
     return Response(status_code=204)
