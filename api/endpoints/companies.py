@@ -28,3 +28,19 @@ async def list_companies(auth: Autheticate = Depends()):
     companies = db.companies.find()
     companies = [{'id': str(company.get('_id')), **company} for company in companies]
     return companies
+
+@router.get('/{id}/', response_model=CompanySchema)
+async def retrieve_company(id: str, auth: Autheticate = Depends()):
+    try:
+        # Fetch company from db
+        company = db.companies.find_one({'_id': ObjectId(id)})
+    except errors.InvalidId:
+        raise HTTPException(status_code=400, detail='invalid id')
+
+    if not company:
+        raise HTTPException(status_code=404, detail='company not found')
+
+    # Appends id with pydantic compatible name
+    company['id'] = str(company['_id'])
+
+    return company
