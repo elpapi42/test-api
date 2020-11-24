@@ -17,3 +17,6 @@ class UserSchema(BaseModel):
 
 class CreateUserSchema(UserSchema):
     password: str
+
+class RetrieveUserSchema(UserSchema):
+    id: str
