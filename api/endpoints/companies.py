@@ -24,9 +24,18 @@ async def create_company(data: CreateCompanySchema, auth: IsAdmin = Depends()):
     return {'id': str(company.inserted_id), **data.dict()}
 
 @router.get('/', response_model=List[CompanySchema])
-async def list_companies(auth: Autheticate = Depends()):
-    companies = db.companies.find()
+async def list_companies(name: str = None, auth: Autheticate = Depends()):
+    filters = {}
+
+    # If name filter, apply it
+    if name:
+        # We will work just withexact match for now
+        filters['name'] = name
+
+    companies = db.companies.find(filters)
+
     companies = [{'id': str(company.get('_id')), **company} for company in companies]
+
     return companies
 
 @router.get('/{id}/', response_model=CompanySchema)
