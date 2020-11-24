@@ -75,6 +75,8 @@ async def update_user(id: str, data: UpdateUserSchema, auth: Autheticate = Depen
         )
     except errors.InvalidId:
         raise HTTPException(status_code=400, detail='invalid id')
+    except errors.WriteError:
+        raise HTTPException(status_code=400, detail='nothing to update')
 
     if result.matched_count <= 0:
         raise HTTPException(status_code=404, detail='user not found')

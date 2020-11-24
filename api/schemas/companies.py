@@ -9,7 +9,12 @@ class CompanySchema(BaseModel):
     nit: str
     address: str
 
-class WriteCompanySchema(BaseModel):
+class CreateCompanySchema(BaseModel):
     name: str
     nit: str
     address: str
+
+class UpdateCompanySchema(BaseModel):
+    name: Optional[str]
+    nit: Optional[str]
+    address: Optional[str]
