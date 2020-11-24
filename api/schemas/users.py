@@ -26,7 +26,7 @@ class ProfileSchema(BaseModel):
         return v
 
 class UserValidatorsModel(BaseModel):
-    """Pack the validation to the input of users models."""
+    """Packs the validation to the input of users models."""
     @validator('email', check_fields=False)
     def validate_email(cls, v):
         if not checkers.is_email(v):
@@ -35,6 +35,7 @@ class UserValidatorsModel(BaseModel):
     
     @validator('company_id', check_fields=False)
     def validate_company_id(cls, v):
+        """Check the supplied company exist in db."""
         count = db.companies.count_documents({'_id': ObjectId(v)})
         if count < 1:
             raise TypeError('supplied company is not registered')
