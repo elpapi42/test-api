@@ -10,10 +10,12 @@ class ProfileSchema(BaseModel):
     gender: str
     document_number: str
 
-class UserSchema(BaseModel):
-    email: str
+class UpdateUserSchema(BaseModel):
     company_id: str
     profile: ProfileSchema
+
+class UserSchema(UpdateUserSchema):
+    email: str
 
 class CreateUserSchema(UserSchema):
     password: str

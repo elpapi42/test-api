@@ -5,7 +5,7 @@ from pymongo import errors
 from bson.objectid import ObjectId
 
 from api.database import db
-from api.schemas.users import CreateUserSchema, RetrieveUserSchema
+from api.schemas.users import CreateUserSchema, RetrieveUserSchema, UpdateUserSchema
 
 
 router = APIRouter()
@@ -43,3 +43,16 @@ async def retrieve_user(id: str):
     user['id'] = str(user['_id'])
 
     return user
+
+@router.patch('/{id}/', response_model=RetrieveUserSchema)
+async def update_user(id: str, data: UpdateUserSchema):
+    try:
+        # Update user data in db
+        result = db.users.update_one({'_id': ObjectId(id)}, {'$set': data.dict()})
+    except errors.InvalidId:
+        raise HTTPException(status_code=400, detail='invalid id')
+
+    if result.matched_count <= 0:
+        raise HTTPException(status_code=404, detail='user not found')
+
+    return Response(status_code=204)
