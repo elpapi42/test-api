@@ -64,3 +64,16 @@ async def update_company(id: str, data: UpdateCompanySchema, auth: IsAdmin = Dep
         raise HTTPException(status_code=404, detail='company not found')
 
     return Response(status_code=204)
+
+@router.delete('/{id}/')
+async def delete_user(id: str, auth: IsAdmin = Depends()):
+    try:
+        # delete company data in db
+        result = db.companies.delete_one({'_id': ObjectId(id)})
+    except errors.InvalidId:
+        raise HTTPException(status_code=400, detail='invalid id')
+
+    if result.deleted_count <= 0:
+        raise HTTPException(status_code=404, detail='company not found')
+
+    return Response(status_code=204)
