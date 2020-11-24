@@ -12,7 +12,7 @@ from api.auth import Autheticate, IsAdmin
 router = APIRouter()
 
 @router.post('/', response_model=CompanySchema)
-async def create_user(data: WriteCompanySchema, auth: IsAdmin = Depends()):
+async def create_company(data: WriteCompanySchema, auth: IsAdmin = Depends()):
     try:
         company = db.companies.insert_one(data.dict())
     except errors.DuplicateKeyError:
@@ -22,3 +22,9 @@ async def create_user(data: WriteCompanySchema, auth: IsAdmin = Depends()):
         )
 
     return {'id': str(company.inserted_id), **data.dict()}
+
+@router.get('/', response_model=List[CompanySchema])
+async def list_companies(auth: Autheticate = Depends()):
+    companies = db.companies.find()
+    companies = [{'id': str(company.get('_id')), **company} for company in companies]
+    return companies
