@@ -1,13 +1,18 @@
 from typing import Optional
+from enum import Enum
 
 from pydantic import BaseModel
 
+
+class UserGender(str, Enum):
+    male = 'M'
+    female = 'F'
 
 class ProfileSchema(BaseModel):
     name: Optional[str]
     last_name: Optional[str]
     age: Optional[int]
-    gender: Optional[str]
+    gender: Optional[UserGender]
     document_number: Optional[str]
 
 class UserSchema(BaseModel):
