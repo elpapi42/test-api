@@ -108,11 +108,40 @@ You can also filter users by company
 GET `/users/?company=5fbd6b9beffeca3ed83d0a03`
 Headers: `Authorization`: `Bearer <token>`
 
+You can also filter users by email
+
+GET `/users/?email=stanton:b64dc4fe@gmail.com`
+Headers: `Authorization`: `Bearer <token>`
+
 ### Retrieve User
 
 Normal users can only access their own data, for fetch data of users other than autheticated, the token must be owned by an admin
 
 GET `/users/:id/`
+Headers: `Authorization`: `Bearer <token>`
+
+Response
+```json
+{
+    "id": "5fbd4b6715c066980bd6e9dc",
+    "email": "whitm@mail.com",
+    "company_id": "5fbd4b6315c066980bd6e9db",
+    "profile": {
+        "name": "whitman",
+        "last_name": "bohorquez",
+        "age": 10,
+        "gender": "M",
+        "document_number": "26493929"
+    },
+    "admin": false
+},
+```
+
+### Retrieve Authenticated User
+
+This endpoint expose the information of the current autheticated user, getting the reference data from the JWT payload.
+
+GET `/users/authenticated/`
 Headers: `Authorization`: `Bearer <token>`
 
 Response
