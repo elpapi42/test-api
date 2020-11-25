@@ -50,6 +50,23 @@ async def list_users(company: str = None, auth: IsAdmin = Depends()):
 
     return users
 
+@router.get('/authenticated/', response_model=UserSchema)
+async def retrieve_auth_user(auth: Autheticate = Depends()):
+    """Returns the autheticated user."""
+    try:
+        # Fetch user from db
+        user = db.users.find_one({'_id': ObjectId(auth.id)})
+    except errors.InvalidId:
+        raise HTTPException(status_code=400, detail='invalid id')
+
+    if not user:
+        raise HTTPException(status_code=404, detail='user not found')
+
+    # Appends id with pydantic compatible name
+    user['id'] = str(user['_id'])
+
+    return user
+
 @router.get('/{id}/', response_model=UserSchema)
 async def retrieve_user(id: str, auth: Autheticate = Depends()):
     # If the requester is not admin, and not owner of this account
