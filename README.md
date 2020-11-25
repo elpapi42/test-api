@@ -68,7 +68,7 @@ The token must be saved for later, will be used to authenticate the requests
 
 This route requires the autheticated user to be an admin, normal users cant fetch other users data
 
-GET `/users/`
+GET `/users/`  
 Headers: `Authorization`: `Bearer <token>`
 
 Response  
@@ -105,19 +105,19 @@ Response
 
 You can also filter users by company
 
-GET `/users/?company=5fbd6b9beffeca3ed83d0a03`
+GET `/users/?company=5fbd6b9beffeca3ed83d0a03`  
 Headers: `Authorization`: `Bearer <token>`
 
 You can also filter users by email
 
-GET `/users/?email=stanton:b64dc4fe@gmail.com`
+GET `/users/?email=stanton:b64dc4fe@gmail.com`  
 Headers: `Authorization`: `Bearer <token>`
 
 ### Retrieve User
 
 Normal users can only access their own data, for fetch data of users other than autheticated, the token must be owned by an admin
 
-GET `/users/:id/`
+GET `/users/:id/`  
 Headers: `Authorization`: `Bearer <token>`
 
 Response
@@ -141,7 +141,7 @@ Response
 
 This endpoint expose the information of the current autheticated user, getting the reference data from the JWT payload.
 
-GET `/users/authenticated/`
+GET `/users/authenticated/`  
 Headers: `Authorization`: `Bearer <token>`
 
 Response
@@ -165,7 +165,7 @@ Response
 
 Normal users can only update their own data, for update data of users other than autheticated, the token must be owned by an admin
 
-PATCH `/users/:id/`
+PATCH `/users/:id/`  
 Headers: `Authorization`: `Bearer <token>`
 ```json
 {
@@ -188,7 +188,7 @@ Response `204 No Content`
 
 Actually, the method allows the users to register to an company, so, if someone wants to be part of a company, he can do:
 
-PATCH `/users/:id/`
+PATCH `/users/:id/`  
 Headers: `Authorization`: `Bearer <token>`
 ```json
 {
@@ -202,7 +202,7 @@ company_id must be a valid and registered company id.
 
 Admins can make other users admins:
 
-PATCH `/users/:id/`
+PATCH `/users/:id/`  
 Headers: `Authorization`: `Bearer <token>`
 ```json
 {
@@ -214,7 +214,7 @@ Headers: `Authorization`: `Bearer <token>`
 
 Only admins can delete users
 
-DELETE `/users/:id/`
+DELETE `/users/:id/`  
 Headers: `Authorization`: `Bearer <token>`
 
 Response `204 No Content`
@@ -223,7 +223,7 @@ Response `204 No Content`
 
 This endpoint return general stats about the distribution of registered users based on age and gender. Only admins can access this endpoint.
 
-GET `/stats/`
+GET `/stats/`  
 Headers: `Authorization`: `Bearer <token>`
 
 Response  
@@ -244,7 +244,7 @@ Response
 
 The returned data can be filtered using `age` and `gender` query filters:
 
-GET `/stats/?age=20`
+GET `/stats/?age=20`  
 Headers: `Authorization`: `Bearer <token>`
 
 Response  
@@ -255,7 +255,7 @@ Response
 }
 ```
 
-GET `/stats/?gender=M`
+GET `/stats/?gender=M`  
 Headers: `Authorization`: `Bearer <token>`
 
 Response  
@@ -271,7 +271,7 @@ Response
 
 Both filters can be used at the same time, and can be used multiple times each, for example:
 
-GET `/stats/?gender=M&age=20&age=21`
+GET `/stats/?gender=M&age=20&age=21`  
 Headers: `Authorization`: `Bearer <token>`
 
 This will return all the Male users with ages 20 or 21
@@ -290,7 +290,7 @@ Response
 
 Only admins can register new companies.
 
-POST `/companies/`
+POST `/companies/`  
 Headers: `Authorization`: `Bearer <token>`
 ```json
 {
@@ -314,7 +314,7 @@ Response
 
 Any authenticated user can list companies.
 
-GET `/companies/`
+GET `/companies/`  
 Headers: `Authorization`: `Bearer <token>`
 
 Response  
@@ -339,7 +339,7 @@ Response
 
 Any authenticated user can retrieve companies.
 
-GET `/companies/:id/`
+GET `/companies/:id/`  
 Headers: `Authorization`: `Bearer <token>`
 
 Response  
@@ -356,7 +356,7 @@ Response
 
 Only admins can update company data
 
-PATCH `/companies/:id/`
+PATCH `/companies/:id/`  
 Headers: `Authorization`: `Bearer <token>`
 ```json
 {
@@ -382,7 +382,7 @@ Response
 
 Only admins can dalete companies
 
-DELETE `/companies/:id/`
+DELETE `/companies/:id/`  
 Headers: `Authorization`: `Bearer <token>`
 
 Response  `204 No Content`
