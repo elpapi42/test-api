@@ -21,7 +21,10 @@ class Autheticate():
         if (not header):
             raise HTTPException(401, 'unathorized')
 
-        token_type, token = header.split()
+        try:
+            token_type, token = header.split()
+        except ValueError:
+            raise HTTPException(400, 'Auth header must be in "Bearer <token>" format')
 
         if token_type.lower() != 'bearer':
             raise HTTPException(401, 'this api only support bearer tokens')
