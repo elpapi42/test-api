@@ -30,7 +30,7 @@ async def create_user(data: CreateUserSchema):
     return {'id': str(user.inserted_id), **data.dict()}
 
 @router.get('/', response_model=List[UserSchema])
-async def list_users(company: str = None, auth: IsAdmin = Depends()):
+async def list_users(company: str = None, email: str = None, auth: IsAdmin = Depends()):
     filters = {}
 
     # If company filter, apply it
@@ -41,6 +41,9 @@ async def list_users(company: str = None, auth: IsAdmin = Depends()):
             # If something fails with the filter
             # Returns empty list
             return []
+
+    if email:
+        filters['email'] = email
 
     # Fetch from db
     users = db.users.find(filters)
